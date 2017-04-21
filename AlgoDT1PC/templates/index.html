@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link href="static/css/jquery-ui-1.12.1.custom/jquery-ui.css" rel="stylesheet" type="text/css" />
+ <link href="static/js/ui.jqgrid.css" rel="stylesheet" type="text/css" />
+
+ 
+    <script src="static/js/jquery-1.9.0.min.js" type="text/javascript"></script>
+    
+    <script src="static/js/jquery.jqGrid.js" type="text/javascript"></script>
+   
+    <script src="static/js/grid.locale-en.js" type="text/javascript"></script>
+    
+    
+    <script type="text/javascript">         
+    
+
+    
+    $( document ).ready(function() {
+    	
+        var buyData =  [
+                   		{ id: "1", symbol: "UVXY", action: "Buy", quantity: "100", limitprice: "20.00", duration: "now", alertedat : "04-14-2017 11:29:30 AM" },
+                		{ id: "2", symbol: "SVXY", action: "Short Sell", quantity: "100", limitprice: "128.00", duration: "now", alertedat : "04-14-2017 11:29:30 AM" }
+                		
+                		];
+        
+    	(function poll() {
+    	    $.ajax({
+    	        url: "GetAlerts",
+    	        type: "GET",
+    	        success: function(data) {
+    	           // console.log(data);
+    	           // $("#dvTime").html(data);
+    	           buyData = data;
+    	           jQuery('#algobuyevents').jqGrid('clearGridData');
+    	           jQuery('#algobuyevents').jqGrid('setGridParam', {data: buyData});
+    	        	$('#algobuyevents').trigger( 'reloadGrid' );
+    	        	
+    	        },
+    	        dataType: "json",
+    	        complete: setTimeout(function() {poll()}, 5000),
+    	        timeout: 2000
+    	    })
+    	})();
+    	
+
+        jQuery("#algobuyevents").jqGrid({
+            data: buyData,
+            datatype: "local",
+            height: 150,
+            rowNum: 10,
+            rowList: [10, 20, 30],
+            colNames: ['ID','Symbol','Action?','Quantity','Limit Price','Duration','Alert Time'],
+            colModel: [
+                { name: 'id', index: 'id', width: 60, sorttype: "int" },
+                { name: 'symbol', index: 'symbol', width: 90 },
+                { name: 'action', index: 'action', width: 100 },
+                { name: 'quantity', index: 'quantity', width: 80, align: "right", sorttype: "float", formatter: "number" },
+                { name: 'limitprice', index: 'limitprice', width: 80, align: "right", sorttype: "float" },
+                { name: 'duration', index: 'duration', width: 80, align: "right" },
+                { name: 'alertedat', index: 'alertedat', width: 150, sortable: false }
+            ],
+            pager: "#pgalgobuyevents",
+            viewrecords: true,
+            caption: "Algo Input - Buy Events -> Last Updated At : "
+        });
+        
+        var DataGrid = $('#algobuyevents');
+
+        //sets the grid size initially
+        DataGrid.jqGrid('setGridWidth', parseInt($(window).width()) - 20);    
+
+        
+        var sellData =  [
+                   		{ id: "1", symbol: "UVXY", action: "Buy", quantity: "100", limitprice: "20.00", duration: "now", alertedat : "04-14-2017 11:29:30 AM" },
+                		{ id: "2", symbol: "SVXY", action: "Short Sell", quantity: "100", limitprice: "128.00", duration: "now", alertedat : "04-14-2017 11:29:30 AM" }
+                		
+                		];
+            jQuery("#algosellevents").jqGrid({
+                data: buyData,
+                datatype: "local",
+                height: 150,
+                rowNum: 10,
+                rowList: [10, 20, 30],
+                colNames: ['ID','Symbol','Action?','Quantity','Limit Price','Duration','Alert Time'],
+                colModel: [
+                    { name: 'id', index: 'id', width: 60, sorttype: "int" },
+                    { name: 'symbol', index: 'symbol', width: 90 },
+                    { name: 'action', index: 'action', width: 100 },
+                    { name: 'quantity', index: 'quantity', width: 80, align: "right", sorttype: "float", formatter: "number" },
+                    { name: 'limitprice', index: 'limitprice', width: 80, align: "right", sorttype: "float" },
+                    { name: 'duration', index: 'duration', width: 80, align: "right" },
+                    { name: 'alertedat', index: 'alertedat', width: 150, sortable: false }
+                ],
+                pager: "#pgalgosellevents",
+                viewrecords: true,
+                caption: "IB Input - Sell Events -> Last Updated At : "
+            });
+            
+            var DataGrid = $('#algobuyevents');
+
+            //sets the grid size initially
+            DataGrid.jqGrid('setGridWidth', parseInt($(window).width()) - 40);    
+
+            $('#algosellevents').jqGrid('setGridWidth', parseInt($(window).width()) - 40);    
+       
+            
+            var ibportfoliodata =  [
+                        		{ id: "1", symbol: "UVXY", action: "Buy", quantity: "100", limitprice: "20.00", duration: "now", alertedat : "04-14-2017 11:29:30 AM" },
+                     		{ id: "2", symbol: "SVXY", action: "Short Sell", quantity: "100", limitprice: "128.00", duration: "now", alertedat : "04-14-2017 11:29:30 AM" }
+                     		
+                     		];
+                 jQuery("#ibportfolio").jqGrid({
+                     data: ibportfoliodata,
+                     datatype: "local",
+                     height: 150,
+                     rowNum: 10,
+                     rowList: [10, 20, 30],
+                     colNames: ['ID','Symbol','Action?','Quantity','Limit Price','Duration','Alert Time'],
+                     colModel: [
+                         { name: 'id', index: 'id', width: 60, sorttype: "int" },
+                         { name: 'symbol', index: 'symbol', width: 90 },
+                         { name: 'action', index: 'action', width: 100 },
+                         { name: 'quantity', index: 'quantity', width: 80, align: "right", sorttype: "float", formatter: "number" },
+                         { name: 'limitprice', index: 'limitprice', width: 80, align: "right", sorttype: "float" },
+                         { name: 'duration', index: 'duration', width: 80, align: "right" },
+                         { name: 'alertedat', index: 'alertedat', width: 150, sortable: false }
+                     ],
+                     pager: "#pgibportfolio",
+                     viewrecords: true,
+                     caption: "IB Portfolio -> Last Updated At : "
+                 });
+                 
+                 $('#ibportfolio').jqGrid('setGridWidth', parseInt($(window).width()) - 40); 
+                 
+    });
+              
+    </script>
+    
+</head>
+<body>
+    <form >
+    <div id="dvTime"  > test</div>
+    <br/>
+    <div class="page">
+
+<br/>
+<table id="algobuyevents"></table>
+<div id="pgalgobuyevents"></div>
+<br/>
+<table id="algosellevents"></table>
+<div id="pgalgosellevents"></div>
+<br/>
+<table id="ibportfolio"></table>
+<div id="pgibportfolio"></div>
+</div>
+</form>
+</body>
+</html>
+
+
+
